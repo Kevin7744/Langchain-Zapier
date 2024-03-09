@@ -1,37 +1,23 @@
-from langchain.agents import initialize_agent
-from langchain.agents.agent import AgentExecutor
-from langchain.agents.agent_toolkits import ZapierToolkit
-from langchain.agents.agent_types import AgentType
+from langchain.agents import AgentType, initialize_agent
+from langchain_community.agent_toolkits import ZapierToolkit
+from langchain_community.utilities.zapier import ZapierNLAWrapper
 from langchain_openai import OpenAI
-from langchain.utilities.zapier import ZapierNLAWrapper
 import os
 
-os.environ["OPENAI_API_KEY"] = ''
-os.environ["ZAPIER_NLA_API_KEY"] = ''
+# get from https://platform.openai.com/
+os.environ["OPENAI_API_KEY"] = os.environ.get("OPENAI_API_KEY", "")
 
-def main():
-    llm = OpenAI(temperature=0)
-    zapier = ZapierNLAWrapper()
-    toolkit = ZapierToolkit.from_zapier_nla_wrapper(zapier)
-    agent = initialize_agent(toolkit.get_tools(),
-                                            llm,
-                                            agent=AgentType.ZERO_SHOT_REACT_DESCRIPTION,
-                                            verbose=True)
+# get from https://nla.zapier.com/docs/authentication/ after logging in):
+os.environ["ZAPIER_NLA_API_KEY"] = os.environ.get("ZAPIER_NLA_API_KEY", "")
 
-    # display available tools
-    for tool in toolkit.get_tools():
-        print(tool.name)
-        print(tool.description)
-        print("\n\n")
-
-    # run prompts until user exists
-    while True:
-        user_prompt: str = input("Enter prompt or type 'exit' to end session.")
-        if user_prompt.strip().lower() == "exit":
-            break
-
-        agent.run(user_prompt)
+llm = OpenAI(temperature=0)
+zapier = ZapierNLAWrapper()
+toolkit = ZapierToolkit.from_zapier_nla_wrapper(zapier)
+agent = initialize_agent(
+    toolkit.get_tools(), llm, agent=AgentType.ZERO_SHOT_REACT_DESCRIPTION, verbose=True
+)
 
 
-if __name__ == "__main__":
-    main()
+agent.run(
+    "Send email to kevinkirui1340@gmail.com with a random joke"
+)
