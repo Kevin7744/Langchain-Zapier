@@ -2,15 +2,18 @@ from langchain.agents import initialize_agent
 from langchain.agents.agent import AgentExecutor
 from langchain.agents.agent_toolkits import ZapierToolkit
 from langchain.agents.agent_types import AgentType
-from langchain.llms import OpenAI
+from langchain_openai import OpenAI
 from langchain.utilities.zapier import ZapierNLAWrapper
+import os
 
+os.environ["OPENAI_API_KEY"] = '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'
+os.environ["ZAPIER_NLA_API_KEY"] = 'sk-ak-Jf2VTWrrWN3YI5M4AeWz13Vh0g'
 
 def main():
-    llm: OpenAI = OpenAI(temperature=0)
-    zapier: ZapierNLAWrapper = ZapierNLAWrapper()
-    toolkit: ZapierToolkit = ZapierToolkit.from_zapier_nla_wrapper(zapier)
-    agent: AgentExecutor = initialize_agent(toolkit.get_tools(),
+    llm = OpenAI(temperature=0)
+    zapier = ZapierNLAWrapper()
+    toolkit = ZapierToolkit.from_zapier_nla_wrapper(zapier)
+    agent = initialize_agent(toolkit.get_tools(),
                                             llm,
                                             agent=AgentType.ZERO_SHOT_REACT_DESCRIPTION,
                                             verbose=True)
