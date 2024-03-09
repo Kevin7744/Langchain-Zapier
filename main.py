@@ -6,8 +6,8 @@ from langchain_openai import OpenAI
 from langchain.utilities.zapier import ZapierNLAWrapper
 import os
 
-os.environ["OPENAI_API_KEY"] = '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'
-os.environ["ZAPIER_NLA_API_KEY"] = 'sk-ak-Jf2VTWrrWN3YI5M4AeWz13Vh0g'
+os.environ["OPENAI_API_KEY"] = ''
+os.environ["ZAPIER_NLA_API_KEY"] = ''
 
 def main():
     llm = OpenAI(temperature=0)
